@@ -152,4 +152,11 @@ body {
     background-color: #f7f7f7;
   }
   
-  
+  .dashboard-container {
+    max-height: 80vh; /* Set the max height */
+    overflow-y: auto; /* Enable vertical scrolling */
+    padding: 20px; /* Add some padding */
+    background-color: #ffffff; /* Optional: Set a background color */
+    border-radius: 8px; /* Optional: Add rounded corners */
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Optional: Add a subtle shadow */
+  }
