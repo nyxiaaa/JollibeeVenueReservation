@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { collection, addDoc } from "firebase/firestore";
 import { db, auth } from "../firebaseConfig"; // Import Firebase auth and db
 import { Link } from "react-router-dom"; // Import Link from React Router for navigation
@@ -6,13 +6,15 @@ import "../styles.css"; // Import the global styles
 import backgroundImage from "../assets/curve.png"; // Import your background image
 
 const Reservation = () => {
-  const [name, setName] = useState("");
-  const [date, setDate] = useState("");
-  const [partySize, setPartySize] = useState("");
-  const [email, setEmail] = useState(""); // Add email state
-  const [branch, setBranch] = useState("");
+  const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
   const [isLoggedIn, setIsLoggedIn] = useState(false); // Track if the user is logged in
+
+  const branchRef = useRef(); 
+  const nameRef = useRef();
+  const dateRef = useRef();
+  const partySizeRef = useRef();
+  const emailRef = useRef();
 
   useEffect(() => {
     const checkUserAuth = () => {
@@ -37,17 +39,13 @@ const Reservation = () => {
     }
 
     try {
-      addDoc(collection(db, "reservations"), {
-        name,
-        email, 
-        branch, 
-        date,
-        partySize,
-      });
+      const ref = collection(db, "reservations");
+      const reservationInfo = {name: nameRef.current.value, email: email, branch: branchRef.current.value, date: dateRef.current.value, partySize: partySizeRef.current.value}
+      addDoc(ref, reservationInfo);
       setMessage("Reservation made successfully!");
-      setName(""); // Clear fields after successful reservation
-      setDate("");
-      setPartySize("");
+      nameRef.current.value = ""; // Clear fields after successful reservation
+      dateRef.current.value = "";
+      partySizeRef.current.value = "";
     } catch (err) {
       setMessage(err.message);
     }
@@ -114,15 +112,14 @@ const Reservation = () => {
             <input
               type="text"
               placeholder="Name"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
+              ref = {nameRef}
               required
               style={{ margin: "10px 0", padding: "10px", width: "100%" }}
             />
             <input
               type="email"
               placeholder="Email"
-              value={email}
+              ref = {emailRef}
               readOnly // Make the email field read-only since it’s auto-populated
               style={{
                 margin: "10px 0",
@@ -132,10 +129,11 @@ const Reservation = () => {
                 cursor: "not-allowed",
               }}
             />
+            
             <select
               type="branch"
               placeholder="Branch"
-              value={branch}
+              ref = {branchRef}
               readOnly // Make the email field read-only since it’s auto-populated
               style={{
                 margin: "10px 0",
@@ -150,16 +148,14 @@ const Reservation = () => {
             </select>
             <input
               type="date"
-              value={date}
-              onChange={(e) => setDate(e.target.value)}
+              ref={dateRef}
               required
               style={{ margin: "10px 0", padding: "10px", width: "100%" }}
             />
             <input
               type="number"
               placeholder="Party Size"
-              value={partySize}
-              onChange={(e) => setPartySize(e.target.value)}
+              ref={partySizeRef}
               required
               style={{ margin: "10px 0", padding: "10px", width: "100%" }}
             />
