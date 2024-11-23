@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { collection, getDocs, doc, deleteDoc, updateDoc } from 'firebase/firestore';
 import { db } from '../firebaseConfig'; // Import Firebase configuration
@@ -82,7 +83,6 @@ const Locations = () => {
     <div
       className="locations-container"
       style={{
-        backgroundImage: `url(${backgroundImage})`,
         backgroundSize: "cover",
         backgroundPosition: "center",
         height: "100vh",
@@ -149,6 +149,7 @@ const Locations = () => {
                   style={{ marginBottom: "10px", width: "100%", padding: "8px" }}
                   required
                 />
+                
                 <input
                   name="pax"
                   defaultValue={location.pax}
@@ -161,7 +162,7 @@ const Locations = () => {
                 <button
                   type="button"
                   onClick={() => setEditingLocation(null)}
-                  style={{ padding: "8px 15px" }}
+                  style={{ marginTop: "10px", padding: "8px 15px" }}
                 >
                   Cancel
                 </button>
@@ -194,6 +195,7 @@ const Locations = () => {
                         marginTop: "10px",
                         padding: "8px 15px",
                         marginRight: "10px",
+                        backgroundColor: "green"
                       }}
                     >
                       Edit
@@ -201,8 +203,9 @@ const Locations = () => {
                     <button
                       onClick={() => handleDelete(location.id)}
                       style={{
+                        marginTop: "10px",
                         padding: "8px 15px",
-                        backgroundColor: "#f44336",
+                        backgroundColor: "gray",
                         color: "white",
                         border: "none",
                         borderRadius: "5px",
