@@ -2,9 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { auth } from "../firebaseConfig"; // Import the Firebase auth object
 import { onAuthStateChanged } from 'firebase/auth'; // Firebase function to track auth state
-import './NavigationBar.css';
 import { doc, getDoc } from "firebase/firestore"; // Firestore functions to get user data
 import { db } from '../firebaseConfig'; // Import Firestore database
+import { getAuth, signOut } from "firebase/auth"; // For the logout
+import './NavigationBar.css';
 
 const NavigationBar = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false); // For tracking login state
@@ -33,12 +34,16 @@ const NavigationBar = () => {
     return () => unsubscribe(); // Cleanup the listener on component unmount
   }, []);
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
     // Log out the user
-    auth.signOut().then(() => {
-      setIsLoggedIn(false);
-      setIsStaff(false);
-    });
+    const auth = getAuth();
+    try {
+      await signOut(auth);
+      console.log("User signed out successfully.");
+      // Redirect to login or home page
+    } catch (error) {
+      console.error("Error during logout:", error.message);
+    }
   };
 
   return (
